@@ -35,11 +35,11 @@ class App extends Component {
               name: 'Initial Margin'
             },
             {
-              id: 'symbolAndDescription',
+              id: 'symbol&Description',
               name: 'Symbol & Description'
             },
             {
-              id: 'changePercentage',
+              id: 'change%',
               name: 'Change %'
             },
           ],
@@ -61,7 +61,6 @@ class App extends Component {
         },
       },
       columnOrder: ['availableList', 'visibleList'],
-      extraArray: [],
       lockedColumns: 0
     }
   }
@@ -70,25 +69,10 @@ class App extends Component {
     console.log(`meep`)
   }
 
-  // checkStrings = (ref, string) => {
-  //   const obj1 = {}
-  //   const obj2 = {}
+  // idtostring = id => {
 
-  //   if(ref.length !== string.length) return false
+  //   id.name
 
-  //   for(let i of ref){
-  //     obj1[i] = (obj1[i] || 0) + 1
-  //   }
-  //   for(let j of string){
-  //     obj2[j] = (obj2[j] || 0) + 1
-  //   }
-  //   for(let key in obj1){
-  //     if(obj1[key] !== obj2[key]){
-  //       return false
-  //     }
-  //   }
-
-  //   return true
   // }
 
   onDragEnd = async (result) => {
@@ -116,33 +100,22 @@ class App extends Component {
       const [removed] = sourceItems.splice(source.index, 1)
       if(destination.droppableId === 'visibleList'){
         const currentState = {...this.state.columns}
-        const placeHolder = [...this.state.extraArray]
-        placeHolder.push(removed)
         destItems.splice(destination.index, 0, removed.id)
         currentState[destination.droppableId].items = destItems
         currentState[source.droppableId].items = sourceItems
         this.setState({
-          columns: currentState,
-          extraArray: placeHolder
+          columns: currentState
         })
       }
       else {
         const currentState = {...this.state.columns}
-        const placeHolder = [...this.state.extraArray]
-        let found
-
-        for(var i = 0; i < placeHolder.length; i++){ 
-          if (placeHolder[i].id === removed) { 
-            found = placeHolder.splice(i, 1); 
-          }
-        }
-        destItems.splice(destination.index, 0, found[0])
-        currentState[source.droppableId].items = sourceItems
-        currentState[destination.droppableId].items = destItems
-        this.setState({
-          columns: currentState,
-          extraArray: placeHolder
-        })
+        console.log(removed)
+        // destItems.splice(destination.index, 0, removed)
+        // currentState[source.droppableId].items = sourceItems
+        // currentState[destination.droppableId].items = destItems
+        // this.setState({
+        //   columns: currentState,
+        // })
       }
     }
     else {

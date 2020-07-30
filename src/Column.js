@@ -22,6 +22,26 @@ const ItemList = styled.div`
     min-height: 100px;
 `
 
+const convertString = (string) => {
+    const newWord = string
+                    .replace(/([A-Z])/g, ' $1 $2').trim()
+                    .replace(/^./, function(str){ return str.toUpperCase(); })
+    return newWord
+}
+
+const renderString = (item) => {
+
+    let newItem;
+    if(item.id){
+        newItem = item.name
+    }
+    else {
+        newItem = convertString(item)
+    }
+
+    return newItem
+}
+
 export default function Column(props) {
    // console.log(`props inside Column is `, props)
     return (
@@ -34,14 +54,13 @@ export default function Column(props) {
                         {...provided.droppableProps}    
                     >
                         {props.column.items.map((item, index) => {
-                            let name = item.id ? item.name : item
+                            let name = renderString(item)
                             let id = item.id ? item.id : item
                             return <Item 
                                         key={id} 
                                         name={name} 
                                         id={id} 
                                         index={index}
-                                       // { props.column.id === 'visibleList' ? handleDblClk={props.handleDblClk} : null }
                                     /> 
                         })}
                         {provided.placeholder}

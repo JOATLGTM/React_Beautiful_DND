@@ -22,9 +22,11 @@ const ItemList = styled.div`
     min-height: 100px;
 `
 
-const convertString = (string) => {
+const convertIdToString = (string) => {
     const newWord = string
-                    .replace(/([A-Z])/g, ' $1 $2').trim()
+                    .replace(/([A-Z])/g, ' $1')
+                    .replace(/([%])/g, ' $1')
+                    .replace(/([&])/g, ' $1')
                     .replace(/^./, function(str){ return str.toUpperCase(); })
     return newWord
 }
@@ -36,14 +38,14 @@ const renderString = (item) => {
         newItem = item.name
     }
     else {
-        newItem = convertString(item)
+        newItem = convertIdToString(item)
     }
 
     return newItem
 }
 
 export default function Column(props) {
-   // console.log(`props inside Column is `, props)
+   //console.log(props)
     return (
         <Container>
             <Title>{props.column.title}</Title>
@@ -56,6 +58,7 @@ export default function Column(props) {
                         {props.column.items.map((item, index) => {
                             let name = renderString(item)
                             let id = item.id ? item.id : item
+                            console.log(name, id)
                             return <Item 
                                         key={id} 
                                         name={name} 

@@ -69,11 +69,20 @@ class App extends Component {
     console.log(`meep`)
   }
 
-  // idtostring = id => {
+  convertIdToString = string => {
+    return string
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/([%])/g, ' $1')
+      .replace(/([&])/g, ' $1')
+      .replace(/^./, function(str){ return str.toUpperCase(); })
+  }
 
-  //   id.name
-
-  // }
+  convertStringToObject(string){
+    return {
+      id: string,
+      name: this.convertIdToString(string),
+    }
+  }
 
   onDragEnd = async (result) => {
     // console.log(`result is `, result)
@@ -103,19 +112,20 @@ class App extends Component {
         destItems.splice(destination.index, 0, removed.id)
         currentState[destination.droppableId].items = destItems
         currentState[source.droppableId].items = sourceItems
+        console.log(currentState)
         this.setState({
           columns: currentState
         })
       }
       else {
         const currentState = {...this.state.columns}
-        console.log(removed)
-        // destItems.splice(destination.index, 0, removed)
-        // currentState[source.droppableId].items = sourceItems
-        // currentState[destination.droppableId].items = destItems
-        // this.setState({
-        //   columns: currentState,
-        // })
+        const removedObject = this.convertStringToObject(removed)
+        destItems.splice(destination.index, 0, removedObject)
+        currentState[source.droppableId].items = sourceItems
+        currentState[destination.droppableId].items = destItems
+        this.setState({
+          columns: currentState,
+        })
       }
     }
     else {

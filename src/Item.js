@@ -18,15 +18,16 @@ const Handle = styled.div`
 `
 
 export default function Item(props) {
-    //console.log(props)
+    //console.log(`props`, props)
     return (
-        <Draggable draggableId={props.id} index={props.index}>
+        <Draggable draggableId={props.id} index={props.index} isDragDisabled={false}>
             {(provided) =>(
                 <Container 
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    //{ ? : onDoubleClick={() => console.log('teehee')}}
+                    index={props.index}
+                    onDoubleClick={() => console.log(props)}
                 >
                     <Handle>
                         <i className="fas fa-bars"></i>

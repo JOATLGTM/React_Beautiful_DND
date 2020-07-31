@@ -60,13 +60,45 @@ class App extends Component {
           ],
         },
       },
+      lockedArray: [],
       columnOrder: ['availableList', 'visibleList'],
       lockedColumns: 0
     }
   }
 
+  // removeLockedItem = () => {
+  //   for(let i = 0; i < arr.length; i++){
+  //     if(arr[i] === )
+  //   }
+  // }
+
   handleDblClk = e => {
-    console.log(`meep`)
+    //console.log(e)
+    const isLocked = this.state.lockedArray.some(item => item === e)
+    let currentLockedArray = [...this.state.lockedArray]
+    const foundIndex = this.state.lockedArray.findIndex(item => item === e)
+    const findIndexInVisibleList = this.state.columns['visibleList'].items.findIndex(item => item === e)
+    const prevfilteredVisibleList = this.state.columns['visibleList'].items.filter((item,index) => index <= findIndexInVisibleList)
+    const nextfilteredVisibleList = this.state.columns['visibleList'].items.filter((item,index) => index >= findIndexInVisibleList)
+    const inVisibleList = this.state.columns['visibleList'].items.some(item => item === e)
+    const newfiltered = currentLockedArray.forEach((item, index) => {
+      return nextfilteredVisibleList.indexOf(item)
+    })
+
+    console.log(newfiltered)
+    //console.log(nextfilteredVisibleList)
+    if(isLocked && inVisibleList){
+      currentLockedArray.splice(foundIndex, 1)
+      this.setState({
+        lockedArray: currentLockedArray
+      })
+    }
+    if(!isLocked && inVisibleList) {
+      currentLockedArray = prevfilteredVisibleList
+      this.setState({
+        lockedArray: currentLockedArray
+      })
+    }
   }
 
   convertIdToString = string => {
@@ -143,6 +175,7 @@ class App extends Component {
   }
 
   render(){
+    console.log(this.state.lockedArray)
     return (
       <DragDropContext onDragEnd={(result) => this.onDragEnd(result)}>
         <Container>
@@ -150,7 +183,7 @@ class App extends Component {
             const column = this.state.columns[columnId]
             // const items = column.items.map(item => item)
             // console.log(`column is `, column)
-            return <Column key={index} column={column} index={index} handleDblClk={this.handleDblClk}/>
+            return <Column key={index} column={column} index={index} handleDblClk={this.handleDblClk} lockedArray={this.state.lockedArray}/>
           })}
         </Container>
       </DragDropContext>

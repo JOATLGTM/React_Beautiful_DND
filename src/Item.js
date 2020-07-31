@@ -18,19 +18,20 @@ const Handle = styled.div`
 `
 
 export default function Item(props) {
-    //console.log(`props`, props)
+    // console.log(`props`, props)
+    const isLocked = props.lockedArray.some(lockedItem => lockedItem === props.id)
     return (
-        <Draggable draggableId={props.id} index={props.index} isDragDisabled={false}>
+        <Draggable draggableId={props.id} index={props.index} isDragDisabled={isLocked}>
             {(provided) =>(
                 <Container 
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     index={props.index}
-                    onDoubleClick={() => console.log(props)}
+                    onDoubleClick={() => props.handleDblClk(props.id)}
                 >
                     <Handle>
-                        <i className="fas fa-bars"></i>
+                        <i className={isLocked ? "fa fa-lock" : "fas fa-bars"}></i>
                     </Handle>
                     {props.name}
                 </Container>

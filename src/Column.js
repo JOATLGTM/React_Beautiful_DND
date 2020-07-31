@@ -58,12 +58,14 @@ export default function Column(props) {
                         {props.column.items.map((item, index) => {
                             let name = renderString(item)
                             let id = item.id ? item.id : item
-                            console.log(name, id)
+                            // console.log(name, id)
                             return <Item 
                                         key={id} 
                                         name={name} 
                                         id={id} 
                                         index={index}
+                                        handleDblClk={props.handleDblClk}
+                                        lockedArray={props.lockedArray}
                                     /> 
                         })}
                         {provided.placeholder}

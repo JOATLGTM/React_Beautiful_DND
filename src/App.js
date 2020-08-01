@@ -73,7 +73,7 @@ class App extends Component {
   // }
 
   handleDblClk = e => {
-    //console.log(e)
+    // console.log(e)
 
     // if the item is inside the new array, its currently locked
     const isLocked = this.state.lockedArray.some(item => item === e)
@@ -105,9 +105,8 @@ class App extends Component {
       }
     }
 
-    console.log(newfiltered)
-    console.log(currentLockedArray)
-    //console.log(nextfilteredVisibleList)
+    //console.log(newfiltered)
+    // console.log(nextfilteredVisibleList)
     // if items are locked - remove items from the isLockedArray
     if(isLocked && inVisibleList){
       currentLockedArray.splice(foundIndex, 1)
@@ -140,8 +139,12 @@ class App extends Component {
     }
   }
 
+  onDragUpdate = result => {
+    // console.log(`onDragUpdate is `, result)
+  }
+
   onDragEnd = async (result) => {
-    // console.log(`result is `, result)
+    // console.log(`onDragEnd is `, result)
     const { destination, source, draggableId } = result
 
     if(!destination) return
@@ -153,22 +156,26 @@ class App extends Component {
       return;
     }
 
+    // // if(draggableId ){
+    //   return
+    // // }
+
     if(source.droppableId !== destination.droppableId){
       const sourceColumn = this.state.columns[source.droppableId];
-      console.log(`source is `, sourceColumn)
+      //console.log(`source is `, sourceColumn)
       const destColumn = this.state.columns[destination.droppableId];
-      console.log(`destination is `, destColumn)
+      //console.log(`destination is `, destColumn)
       const sourceItems = [...sourceColumn.items];
-      console.log(`source item is `, sourceItems)
+      //console.log(`source item is `, sourceItems)
       const destItems = [...destColumn.items]
-      console.log(`dest item is `, destItems)
+      //console.log(`dest item is `, destItems)
       const [removed] = sourceItems.splice(source.index, 1)
       if(destination.droppableId === 'visibleList'){
         const currentState = {...this.state.columns}
         destItems.splice(destination.index, 0, removed.id)
         currentState[destination.droppableId].items = destItems
         currentState[source.droppableId].items = sourceItems
-        console.log(currentState)
+        //console.log(currentState)
         this.setState({
           columns: currentState
         })
@@ -185,6 +192,13 @@ class App extends Component {
       }
     }
     else {
+      console.log(draggableId)
+      if(this.state.lockedArray.some(item => {
+        console.log(draggableId, item)
+        return !(draggableId === item)
+      })){
+        return
+      }
       const column = this.state.columns[source.droppableId];
       const copiedItems = [...column.items]
       const [removed] = copiedItems.splice(source.index, 1)
@@ -199,9 +213,12 @@ class App extends Component {
   }
 
   render(){
-    console.log(this.state.lockedArray)
+    //console.log(this.state.lockedArray)
     return (
-      <DragDropContext onDragEnd={(result) => this.onDragEnd(result)}>
+      <DragDropContext 
+        onDragEnd={(result) => this.onDragEnd(result)}
+        onDragUpdate={(result) => this.onDragUpdate(result)}
+      >
         <Container>
           {this.state.columnOrder.map((columnId, index) => {
             const column = this.state.columns[columnId]

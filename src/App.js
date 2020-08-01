@@ -74,25 +74,49 @@ class App extends Component {
 
   handleDblClk = e => {
     //console.log(e)
+
+    // if the item is inside the new array, its currently locked
     const isLocked = this.state.lockedArray.some(item => item === e)
     let currentLockedArray = [...this.state.lockedArray]
+
+    // finds index of the item inside the locked array
     const foundIndex = this.state.lockedArray.findIndex(item => item === e)
+
+    // find index of the item inside the visible array
     const findIndexInVisibleList = this.state.columns['visibleList'].items.findIndex(item => item === e)
+
+    // returns the item itself and the items before
     const prevfilteredVisibleList = this.state.columns['visibleList'].items.filter((item,index) => index <= findIndexInVisibleList)
+
+    // returns the items itself and the items after
     const nextfilteredVisibleList = this.state.columns['visibleList'].items.filter((item,index) => index >= findIndexInVisibleList)
+
+
     const inVisibleList = this.state.columns['visibleList'].items.some(item => item === e)
-    const newfiltered = currentLockedArray.forEach((item, index) => {
-      return nextfilteredVisibleList.indexOf(item)
+    const newfiltered = currentLockedArray.filter((item, index) => {
+      return nextfilteredVisibleList.indexOf(item) > -1
     })
 
+    for(let i = 0; i < currentLockedArray.length; i++){
+      for(let j = 0; j < newfiltered.length; j++) {
+        if(currentLockedArray[i] === newfiltered[j]){
+          currentLockedArray.splice(i, 1)
+        }
+      }
+    }
+
     console.log(newfiltered)
+    console.log(currentLockedArray)
     //console.log(nextfilteredVisibleList)
+    // if items are locked - remove items from the isLockedArray
     if(isLocked && inVisibleList){
       currentLockedArray.splice(foundIndex, 1)
       this.setState({
         lockedArray: currentLockedArray
       })
     }
+
+    // if items are not locked - add items to the isLockedArray
     if(!isLocked && inVisibleList) {
       currentLockedArray = prevfilteredVisibleList
       this.setState({

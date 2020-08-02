@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Draggable } from 'react-beautiful-dnd'
 
 const Container = styled.div`
-    color: white;
+    color: ${props => props.isLocked ? 'gray' : 'white'};
     padding: 8px;
     margin-bottom: 8px;
     font-weight: bold;
@@ -23,7 +23,8 @@ export default function Item(props) {
     return (
         <Draggable draggableId={props.id} index={props.index} isDragDisabled={isLocked}>
             {(provided) =>(
-                <Container 
+                <Container
+                    isLocked={isLocked}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}

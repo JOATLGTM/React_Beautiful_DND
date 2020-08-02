@@ -9,68 +9,53 @@ const Container = styled.div`
   background-color: #0f1117;
 `
 
+const MainContainer = styled.div`
+  width: 600px;
+  padding: 0 1em;
+  margin-left: auto;
+  margin-right: auto;
+`
+
 class App extends Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state = {
       columns: {
         'availableList': {
           id: 'availableList',
           title: 'Available',
-          items: [
-            {
-              id: 'startTime',
-              name: 'Start Time'
-            },
-            {
-              id: 'stopTime',
-              name: 'Stop Time'
-            },
-            {
-              id: 'perPoint',
-              name: 'Per Point'
-            },
-            {
-              id: 'initialMargin',
-              name: 'Initial Margin'
-            },
-            {
-              id: 'symbol&Description',
-              name: 'Symbol & Description'
-            },
-            {
-              id: 'change%',
-              name: 'Change %'
-            },
-          ],
+          items: props.availableColumn
         },
         'visibleList': {
           id: 'visibleList',
           title: 'Visible',
-          items: [
-            // 'Symbol & Description',
-            // 'Change %',
-            // 'Change',
-            // 'Last',
-            // 'Last Volume',
-            // 'Bid',
-            // 'Bid Size',
-            // 'Ask',
-            // 'Ask Size'
-          ],
+          items: props.visibleColumn,
         },
       },
       lockedArray: [],
       columnOrder: ['availableList', 'visibleList'],
-      lockedColumns: 0
+      lockedColumns: props.lockedColumns,
+      onSubmit: false
     }
   }
 
-  // removeLockedItem = () => {
-  //   for(let i = 0; i < arr.length; i++){
-  //     if(arr[i] === )
-  //   }
-  // }
+  onHandleBtn = () => {
+    console.log(this.state.lockedArray.length)
+    this.setState({
+      onSubmit: true,
+      lockedColumns: this.state.lockedArray.length
+    })
+    console.log(`Inside the invisible Array is `, this.state.columns['visibleList'].items)
+    console.log(`There are ${this.state.lockedColumns} columns that are locked`)
+  }
+
+  onCancelBtn = () => {
+    this.setState({
+      onSubmit: false
+    })
+  }
+
+
 
   handleDblClk = e => {
     // console.log(e)
@@ -139,12 +124,8 @@ class App extends Component {
     }
   }
 
-  onDragUpdate = result => {
-    // console.log(`onDragUpdate is `, result)
-  }
-
   onDragEnd = async (result) => {
-    // console.log(`onDragEnd is `, result)
+    console.log(`onDragEnd is `, result)
     const { destination, source, draggableId } = result
 
     if(!destination) return
@@ -161,6 +142,12 @@ class App extends Component {
     // // }
 
     if(source.droppableId !== destination.droppableId){
+      // if(this.state.lockedArray.some(item => {
+      //   console.log(draggableId, item)
+      //   return !(draggableId === item)
+      // })){
+      //   return
+      // }
       const sourceColumn = this.state.columns[source.droppableId];
       //console.log(`source is `, sourceColumn)
       const destColumn = this.state.columns[destination.droppableId];
@@ -172,13 +159,22 @@ class App extends Component {
       const [removed] = sourceItems.splice(source.index, 1)
       if(destination.droppableId === 'visibleList'){
         const currentState = {...this.state.columns}
-        destItems.splice(destination.index, 0, removed.id)
-        currentState[destination.droppableId].items = destItems
-        currentState[source.droppableId].items = sourceItems
-        //console.log(currentState)
-        this.setState({
-          columns: currentState
-        })
+        if(this.state.lockedArray.some((item,index) => {
+          return destination.index === index
+        })){
+          console.log('true')
+          this.setState({
+            columns: currentState
+          })
+        }else {
+          destItems.splice(destination.index, 0, removed.id)
+          currentState[destination.droppableId].items = destItems
+          currentState[source.droppableId].items = sourceItems
+          //console.log(currentState)
+          this.setState({
+            columns: currentState
+          })
+        }
       }
       else {
         const currentState = {...this.state.columns}
@@ -193,41 +189,50 @@ class App extends Component {
     }
     else {
       console.log(draggableId)
-      if(this.state.lockedArray.some(item => {
-        console.log(draggableId, item)
-        return !(draggableId === item)
-      })){
-        return
-      }
       const column = this.state.columns[source.droppableId];
       const copiedItems = [...column.items]
-      const [removed] = copiedItems.splice(source.index, 1)
-      copiedItems.splice(destination.index, 0, removed)
-  
       const currentState = {...this.state.columns}
-      currentState[source.droppableId].items = copiedItems
-      this.setState({
-        columns: currentState
-      })
+      console.log(currentState['visibleList'].items)
+      if(this.state.lockedArray.some((item,index) => {
+        return destination.index === index
+      })){
+        console.log('true')
+        this.setState({
+          columns: currentState
+        })
+      }
+      else {
+        const [removed] = copiedItems.splice(source.index, 1)
+        copiedItems.splice(destination.index, 0, removed)
+        currentState[source.droppableId].items = copiedItems
+        this.setState({
+          columns: currentState
+        })
+      }
     }
   }
 
   render(){
-    //console.log(this.state.lockedArray)
+    // console.log(this.state.lockedArray)
     return (
-      <DragDropContext 
-        onDragEnd={(result) => this.onDragEnd(result)}
-        onDragUpdate={(result) => this.onDragUpdate(result)}
-      >
-        <Container>
-          {this.state.columnOrder.map((columnId, index) => {
-            const column = this.state.columns[columnId]
-            // const items = column.items.map(item => item)
-            // console.log(`column is `, column)
-            return <Column key={index} column={column} index={index} handleDblClk={this.handleDblClk} lockedArray={this.state.lockedArray}/>
-          })}
-        </Container>
-      </DragDropContext>
+      <MainContainer>
+        <DragDropContext 
+          onDragEnd={(result) => this.onDragEnd(result)}
+        >
+          <Container>
+            {this.state.columnOrder.map((columnId, index) => {
+              const column = this.state.columns[columnId]
+              // const items = column.items.map(item => item)
+              // console.log(`column is `, column)
+              return <Column key={index} column={column} index={index} handleDblClk={this.handleDblClk} lockedArray={this.state.lockedArray}/>
+            })}
+          </Container>
+        </DragDropContext>
+        <button onClick={() => this.onHandleBtn()}>Submit</button>
+        <button onClick={() => this.onCancelBtn()}>Cancel</button>
+        <p>{this.state.onSubmit ? `Inside the invisible Array is ${this.state.columns['visibleList'].items}` : null }</p>
+        <p>{this.state.onSubmit ? `There are ${this.state.lockedColumns} columns that are locked` : null }</p>
+      </MainContainer>
     )
   }
 }

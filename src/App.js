@@ -3,6 +3,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 import './App.css';
 import Column from './Column'
+import Header from './Header'
 
 const Container = styled.div`
   display: flex;
@@ -45,8 +46,7 @@ class App extends Component {
       onSubmit: true,
       lockedColumns: this.state.lockedArray.length
     })
-    console.log(`Inside the invisible Array is `, this.state.columns['visibleList'].items)
-    console.log(`There are ${this.state.lockedColumns} columns that are locked`)
+    alert(`Inside the invisible Array is ${this.state.columns['visibleList'].items}`)
   }
 
   onCancelBtn = () => {
@@ -54,8 +54,6 @@ class App extends Component {
       onSubmit: false
     })
   }
-
-
 
   handleDblClk = e => {
     // console.log(e)
@@ -216,6 +214,9 @@ class App extends Component {
     // console.log(this.state.lockedArray)
     return (
       <MainContainer>
+        <Header />
+        <p>{this.state.onSubmit ? `Inside the invisible Array is ${this.state.columns['visibleList'].items}` : null }</p>
+        <p>{this.state.onSubmit ? `There are ${this.state.lockedColumns} columns that are locked` : null }</p>
         <DragDropContext 
           onDragEnd={(result) => this.onDragEnd(result)}
         >
@@ -230,8 +231,6 @@ class App extends Component {
         </DragDropContext>
         <button onClick={() => this.onHandleBtn()}>Submit</button>
         <button onClick={() => this.onCancelBtn()}>Cancel</button>
-        <p>{this.state.onSubmit ? `Inside the invisible Array is ${this.state.columns['visibleList'].items}` : null }</p>
-        <p>{this.state.onSubmit ? `There are ${this.state.lockedColumns} columns that are locked` : null }</p>
       </MainContainer>
     )
   }

@@ -1,78 +1,43 @@
 import React from 'react'
 import styled from 'styled-components'
-import Item from './Item'
-import { Droppable } from 'react-beautiful-dnd'
+import { Draggable } from 'react-beautiful-dnd'
 
 const Container = styled.div`
-    margin: 8px;
-    width: 50%;
-
+    color: ${props => props.isLocked ? 'gray' : 'white'};
+    padding: 8px;
+    margin-bottom: 8px;
+    font-weight: bold;
     display: flex;
-    flex-direction: column;
 `
 
-const Title = styled.h3`
-    padding: 8px;
-    color: gray;
+const Handle = styled.div`
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 8px;
 `
-
-const ItemList = styled.div`
-    padding: 8px;
-    flex-grow: 1;
-    min-height: 100px;
-`
-
-const convertIdToString = (string) => {
-    const newWord = string
-                    .replace(/([A-Z])/g, ' $1')
-                    .replace(/([%])/g, ' $1')
-                    .replace(/([&])/g, ' $1')
-                    .replace(/^./, function(str){ return str.toUpperCase(); })
-    return newWord
-}
-
-const renderString = (item) => {
-
-    let newItem;
-    if(item.id){
-        newItem = item.name
-    }
-    else {
-        newItem = convertIdToString(item)
-    }
-
-    return newItem
-}
 
 export default function Column(props) {
-   //console.log(props)
+    const { index, id, handleDblClk, name, lockedArray } = props
+    const isLocked = lockedArray.some(lockedItem => lockedItem === id)
     return (
-        <Container>
-            <Title>{props.column.title}</Title>
-            <Droppable droppableId={props.column.id}>
-                {provided => (
-                    <ItemList
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}    
-                    >
-                        {props.column.items.map((item, index) => {
-                            let name = renderString(item)
-                            let id = item.id ? item.id : item
-                            // console.log(name, id)
-                            return <Item 
-                                        key={id} 
-                                        name={name} 
-                                        id={id} 
-                                        index={index}
-                                        handleDblClk={props.handleDblClk}
-                                        lockedArray={props.lockedArray}
-                                    /> 
-                        })}
-                        {provided.placeholder}
-                    </ItemList>
-                )}
-            </Droppable>
-        </Container>
+        <Draggable draggableId={id} index={index} isDragDisabled={isLocked}>
+            {(provided) =>(
+                <Container
+                    isLocked={isLocked}
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    index={index}
+                    onDoubleClick={() => handleDblClk(id)}
+                >
+                    <Handle>
+                        <i className={isLocked ? "fa fa-lock" : "fas fa-bars"}></i>
+                    </Handle>
+                    {name}
+                </Container>
+            )}
+        </Draggable>
     )
 }
 

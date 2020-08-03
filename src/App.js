@@ -75,7 +75,7 @@ class App extends Component {
   renderResults = () => {
     const visibleColumns = this.state.columns['visibleList'].items
     return `The id strings inside visible list is ${visibleColumns.length > 0 ? visibleColumns.join(', ') : 'empty'}. 
-    There are ${this.state.lockedArray.length} items that are currently locked.`
+    There are ${this.state.lockedArray.length} items currently locked.`
   }
 
   handleDblClk = columnId => {

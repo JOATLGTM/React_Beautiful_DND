@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Draggable } from 'react-beautiful-dnd'
 
@@ -8,6 +8,13 @@ const Container = styled.div`
     margin-bottom: 8px;
     font-weight: bold;
     display: flex;
+    :hover ${props => !props.isLocked ? `{
+            background-color: gray;
+            opacity: .8;
+            width: 90%;
+            color: white;
+            }` : null
+    }
 `
 
 const Handle = styled.div`
@@ -20,10 +27,14 @@ const Handle = styled.div`
 export default function Column(props) {
     const { index, id, handleDblClk, name, lockedArray } = props
     const isLocked = lockedArray.some(lockedItem => lockedItem === id)
+
+    const [hovered, setHover] = useState(false)
     return (
         <Draggable draggableId={id} index={index} isDragDisabled={isLocked}>
             {(provided) =>(
                 <Container
+                    onMouseEnter={() => setHover(true)}
+                    onMouseLeave={() => setHover(false)}
                     isLocked={isLocked}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
@@ -32,7 +43,7 @@ export default function Column(props) {
                     onDoubleClick={() => handleDblClk(id)}
                 >
                     <Handle>
-                        <i className={isLocked ? "fa fa-lock" : "fas fa-bars"}></i>
+                        <i className={isLocked ? "fa fa-lock" : hovered ? "fas fa-bars" : null}></i>
                     </Handle>
                     {name}
                 </Container>

@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/React_Beautiful_DND/static/css/main.89d28acf.chunk.css",
+    "main.js": "/React_Beautiful_DND/static/js/main.e050137c.chunk.js",
+    "main.js.map": "/React_Beautiful_DND/static/js/main.e050137c.chunk.js.map",
+    "runtime-main.js": "/React_Beautiful_DND/static/js/runtime-main.32b23ada.js",
+    "runtime-main.js.map": "/React_Beautiful_DND/static/js/runtime-main.32b23ada.js.map",
+    "static/js/2.ad68c7a7.chunk.js": "/React_Beautiful_DND/static/js/2.ad68c7a7.chunk.js",
+    "static/js/2.ad68c7a7.chunk.js.map": "/React_Beautiful_DND/static/js/2.ad68c7a7.chunk.js.map",
+    "index.html": "/React_Beautiful_DND/index.html",
+    "precache-manifest.6a6e0f3b3bcff7ab73c7ac8c197c2e5e.js": "/React_Beautiful_DND/precache-manifest.6a6e0f3b3bcff7ab73c7ac8c197c2e5e.js",
+    "service-worker.js": "/React_Beautiful_DND/service-worker.js",
+    "static/css/main.89d28acf.chunk.css.map": "/React_Beautiful_DND/static/css/main.89d28acf.chunk.css.map",
+    "static/js/2.ad68c7a7.chunk.js.LICENSE.txt": "/React_Beautiful_DND/static/js/2.ad68c7a7.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.32b23ada.js",
+    "static/js/2.ad68c7a7.chunk.js",
+    "static/css/main.89d28acf.chunk.css",
+    "static/js/main.e050137c.chunk.js"
+  ]
+}

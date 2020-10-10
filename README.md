@@ -1,24 +1,47 @@
-## How to run app
+## Table of Contents
+
+* [About the Project](#about-the-project)
+  * [Built With](#built-with)
+* [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+
+## About The Project
+
+A react application that deals with drag and dropping items in two different columns. 
+
+The component should take three parameters:
+
+- available columns: an array of objects, each item is an object with “id” string property for unique identification and “name” string property for displaying like { id: “startTime”, name: “Start Time”}
+
+- visible columns: an array of strings, each string is a reference to id property of previous array;
+
+- and a number of fixed columns (fixed columns are shown with lock icon).
+
+### Built With
+* [React-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd)
+* [Styled-Components](https://styled-components.com/docs)
+
+## Getting Started
+
 - npm install
 - npm start
 
-## Thoughts on the test
+### Prerequisites
 
-During the stages of developing this app, I was having difficulty finding
-ways to drag and drop object items to a column that only accepts strings.
-I decided to convert the id string into a string that is matches the object name property. 
+- No prerequisites
 
-Next was trying to figure out how to lock "previous" items and unlocking "next" items. 
-I created a new array that would store locked items and reference from it. 
-It was inspired by the previous task explained above.
+### Installation
 
-I decided not to use react-bootstrap since styled-components library allows
-you to create your own styled components, hence the name, but lacks the response from the change of width of the browser.
-
-A few additional things I would have added would be tests for the components
-and create response design when the viewport changes from desktop to mobile.
-Lastly, I would have used Context for better state management. Luckily since the components aren't deeply nested, it wouldn't be a huge problem, but it would be better used for scalabilty. 
-
-## Dependencies used
-- React-beautiful-dnd
-- Styled-Components
+1. Clone the repo
+```sh
+git clone https://github.com/JOATLGTM/React_Beautiful_DND.git
+```
+3. Install NPM packages
+```sh
+npm install
+```
+4. Start the application
+```sh
+npm start
+```
